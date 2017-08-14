@@ -1,6 +1,4 @@
 //
-// jaemannyeh
-//
 // sudo apt-get update
 // sudo apt-get install libprotobuf-dev
 // sudo apt-get install protobuf-compiler
@@ -11,6 +9,8 @@
 //
 // ./cwmp_xml_to_proto tr-069-1-0-0-full.xml > tr_069_1_0_0_full.proto
 // protoc --cpp_out=. tr_069_1_0_0_full.proto
+//
+// jaemannyeh
 //
 
 #include <iostream>
