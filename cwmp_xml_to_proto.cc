@@ -7,8 +7,8 @@
 //
 // c++ cwmp_xml_to_proto.cc -std=c++11 `xml2-config --cflags` -o cwmp_xml_to_proto -lxml2
 //
-// ./cwmp_xml_to_proto tr-069-1-0-0-full.xml > tr_069_1_0_0_full.proto
-// protoc --cpp_out=. tr_069_1_0_0_full.proto
+// ./cwmp_xml_to_proto tr-069-1-0-0-full.xml > tr-069-1-0-0-full.proto
+// protoc --cpp_out=. tr-069-1-0-0-full.proto
 //
 // jaemannyeh
 //
