@@ -2,9 +2,9 @@
 
 XML to Protocol Buffers converter for CWMP xml files from https://www.broadband-forum.org
 
-This is only for CWMP xml files from https://www.broadband-forum.org.
+This is for CWMP xml files from https://www.broadband-forum.org.
 
-It successfully coneverted the following files to proto files.
+It coneverts the following files to proto files.
 
 tr-069-1-0-0-full.xml
 
