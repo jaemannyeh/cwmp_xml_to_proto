@@ -198,7 +198,7 @@ static int cwmp_xml_to_proto(char *cwmp_xml_file_name) {
   xmlDocPtr doc =  xmlParseFile(cwmp_xml_file_name);
   
   xmlNode *node = xmlDocGetRootElement(doc);;
-  
+
   string package_name(cwmp_xml_file_name);
   package_name.erase(package_name.rfind(".xml"));
   package_name = package_name.substr(package_name.rfind('/')+1);

@@ -5,7 +5,10 @@
 XML_FILES := $(wildcard ./*.xml)
 PROTO_FILES := $(patsubst %.xml, %.proto, $(notdir $(XML_FILES)))
 
-all: cwmp_xml_to_proto $(PROTO_FILES) test
+all: cwmp_xml_to_proto $(PROTO_FILES) test cwmp_proto_to_grpc 
+
+cwmp_proto_to_grpc: cwmp_proto_to_grpc.cc
+	c++ $< -o $@ -std=c++11 `pkg-config --cflags --libs protobuf`
 
 cwmp_xml_to_proto: cwmp_xml_to_proto.cc
 	c++ $< -o $@ -std=c++11 `xml2-config --cflags` -lxml2
