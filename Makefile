@@ -16,10 +16,16 @@ cwmp_xml_to_proto: cwmp_xml_to_proto.cc
 	c++ $< -o $@ -std=c++11 `xml2-config --cflags` -lxml2
 
 %.proto: %.xml
-	./cwmp_xml_to_proto $< > $@.proto ## .proto.proto
-	@echo protoc --cpp_out=. $@.proto
-	./cwmp_proto_to_grpc $@.proto > $@
-	-rm $@.proto ## .proto.proto
+	./cwmp_xml_to_proto $<
+	mv $@ $@.1.proto
+	./cwmp_proto_to_grpc $@.1.proto > $@
+	protoc --cpp_out=. $@	
+	protoc -I ./ --grpc_out=. --plugin=protoc-gen-grpc=`which grpc_cpp_plugin` $@
+	rm $@.1.proto
+    	
+## protoc --cpp_out=. $@
+##
+##-rm $@.proto ## .proto.proto
 	
 %.pb.cc: %.proto
 	protoc -I ./ --cpp_out=. $<
