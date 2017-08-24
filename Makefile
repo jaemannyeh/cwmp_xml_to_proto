@@ -25,8 +25,6 @@ tr-069-1-0-0-full:
 	./cwmp_xml_to_proto --package_name=tr069 $@.xml
 	./cwmp_proto_to_grpc --service_name=Gateway $@.proto > $@.1.proto
 	mv $@.1.proto $@.proto 
-	protoc -I ./ --cpp_out=. $@.proto
-	protoc -I ./ --grpc_out=. --plugin=protoc-gen-grpc=`which grpc_cpp_plugin` $@.proto
 
 tr-098: tr-098-1-8-0-full 	
 tr-098-1-8-0-full:
@@ -87,6 +85,6 @@ show:
 	@echo PB_O_FILES = $(PB_O_FILES)
 	@echo GRPC_PB_O_FILES = $(GRPC_PB_O_FILES)	
 	
-test: test.cc tr-069-1-0-0-full.pb.cc
-	c++ test.cc tr-069-1-0-0-full.pb.cc -o test `pkg-config --cflags --libs protobuf`
+## test: test.cc tr-069-1-0-0-full.pb.cc
+##	c++ test.cc tr-069-1-0-0-full.pb.cc -o test `pkg-config --cflags --libs protobuf`
 	
