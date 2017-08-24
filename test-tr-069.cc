@@ -59,7 +59,7 @@ static void test_4(tr069::InternetGatewayDevice &device) {
 
 static int test() {
   string data_file_name(__FILE__);
-  data_file_name.erase(data_file_name.rfind(".cc"));  
+  data_file_name.erase(data_file_name.rfind(".")); // ".cc" 
   data_file_name += ".dat";
   cout << data_file_name.c_str() << endl;
   

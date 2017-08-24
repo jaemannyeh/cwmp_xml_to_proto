@@ -42,24 +42,24 @@ static string the_service_name;
 
 static void add_service_method(const string& slash2, const google::protobuf::FieldDescriptor *field, const google::protobuf::Descriptor* desc) {
   
-  std::string argument1;
-  std::string argument2;
+  std::string arg_r;
+  std::string arg_w;
   if (field && field->is_repeated()) {
-    argument1 = "ServerReader<" + desc->full_name() + ">";
-    argument2 = "ServerWriter<" + desc->full_name() + ">";
+    arg_w = "ServerWriter<" + desc->full_name() + ">"; // Get
+    arg_r = "ServerReader<" + desc->full_name() + ">"; // Set
   } else {
-    argument1 = desc->full_name();
-    argument2 = desc->full_name();
+    arg_w = desc->full_name(); // Get
+    arg_r = "const " + desc->full_name(); // Set
   }
-  find_and_replace(argument1,".","::");
-  find_and_replace(argument2,".","::");
+  find_and_replace(arg_r,".","::");
+  find_and_replace(arg_w,".","::");
   
   service_methods << slash2 << "Status Get" << desc->name() << "(ServerContext* context, const " 
         << the_service_name << "Request* request, " 
-        << argument2 << "* reply"
+        << arg_w << "* reply"
         << ") override { return Status::OK; }" << endl;
-  service_methods << slash2 << "Status Set" << desc->name() << "(ServerContext* context, const "
-        << argument1 << "* request, "
+  service_methods << slash2 << "Status Set" << desc->name() << "(ServerContext* context, "
+        << arg_r << "* request, "
         << the_service_name << "Reply* reply) override { return Status::OK; }" << endl;
   service_methods << endl;  
 }
