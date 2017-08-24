@@ -188,16 +188,11 @@ static int cwmp_xml_walk_tree(xmlNode *the_node)
   return indent;
 }
 
-static int cwmp_xml_to_proto(char *cwmp_xml_file_name) {
+static int cwmp_xml_to_proto(char *cwmp_xml_file_name, string& package_name) {
   xmlDocPtr doc =  xmlParseFile(cwmp_xml_file_name);
   
   xmlNode *node = xmlDocGetRootElement(doc);;
 
-  string package_name(cwmp_xml_file_name);
-  package_name.erase(package_name.rfind(".xml"));
-  package_name = package_name.substr(package_name.rfind('/')+1);
-  std::replace( package_name.begin(), package_name.end(), '-', '_' );
-  
   string proto_name(cwmp_xml_file_name);
   proto_name.erase(proto_name.rfind(".xml"));  
   proto_name += ".proto";
@@ -209,7 +204,7 @@ static int cwmp_xml_to_proto(char *cwmp_xml_file_name) {
   proto << endl;
   proto << "syntax = \"proto3\";" << endl;;
   proto << endl;
-  proto << "package " << package_name << ';' << endl;
+  proto << "package " << package_name << ';' << " //!! renamed" << endl;
   proto << endl;
   
   cwmp_xml_walk_tree(node); 
@@ -219,7 +214,24 @@ static int cwmp_xml_to_proto(char *cwmp_xml_file_name) {
   return 0;    
 }
 
+#include <assert.h>
+
 int main(int argc,char *argv[]) {
-  cwmp_xml_to_proto(argv[1]);
-  return 0;
+
+  if (argc==3) {
+    std::string option("--package_name=");
+    std::string argv_1(argv[1]);
+    size_t found = argv_1.find(option);
+    if (found == 0) {
+      string package_name = argv_1.substr(found+option.size());
+      if (!package_name.empty()) {
+        cwmp_xml_to_proto(argv[2],package_name);
+        return 0;
+      }
+    }
+  }
+
+  cout << "usage: cwmp_xml_to_proto --package_name=tr069 tr-069-1-0-0-full.xml" << endl;
+
+  return -1;
 }
