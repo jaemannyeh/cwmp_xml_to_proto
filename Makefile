@@ -3,7 +3,7 @@
 CXXFLAGS += -std=c++11
 CPPFLAGS += -I/usr/local/include -pthread
 
-.PHONY: default proto all clean show
+.PHONY: default clean show
 
 XML_FILES := $(wildcard ./*.xml)
 PROTO_FILES := $(wildcard ./*.proto) ## PROTO_FILES := $(patsubst %.xml, %.proto, $(notdir $(XML_FILES)))
@@ -75,7 +75,7 @@ pb_obj: $(PB_O_FILES) $(GRPC_PB_O_FILES)
 	protoc -I ./ --grpc_out=. --plugin=protoc-gen-grpc=`which grpc_cpp_plugin` $<
 
 clean:
-	-rm *.methods *.proto *.pb.cc *.pb.h *.o cwmp_xml_to_proto cwmp_proto_to_grpc
+	-rm *.dat *.methods *.proto *.pb.cc *.pb.h *.o test-tr-069 cwmp_xml_to_proto cwmp_proto_to_grpc
 	
 show:
 	@echo XML_FILES = $(XML_FILES)
@@ -85,6 +85,6 @@ show:
 	@echo PB_O_FILES = $(PB_O_FILES)
 	@echo GRPC_PB_O_FILES = $(GRPC_PB_O_FILES)	
 	
-## test: test.cc tr-069-1-0-0-full.pb.cc
-##	c++ test.cc tr-069-1-0-0-full.pb.cc -o test `pkg-config --cflags --libs protobuf`
+test-tr-069: test-tr-069.cc tr-069-1-0-0-full.pb.cc
+	c++ test-tr-069.cc tr-069-1-0-0-full.pb.cc -o $@ `pkg-config --cflags --libs protobuf`
 	

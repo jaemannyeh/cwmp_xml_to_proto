@@ -13,7 +13,7 @@
 
 using namespace std;
 
-static void test_1(tr_069_1_0_0_full::InternetGatewayDevice &device) {
+static void test_1(tr069::InternetGatewayDevice &device) {
   cout << setw(40) << "landevice_number_of_entries " << device.landevice_number_of_entries() << endl;
   cout << setw(40) << "wandevice_number_of_entries " << device.wandevice_number_of_entries() << endl;
 
@@ -21,21 +21,21 @@ static void test_1(tr_069_1_0_0_full::InternetGatewayDevice &device) {
   device.set_wandevice_number_of_entries(__LINE__);
 }
 
-static void test_2(tr_069_1_0_0_full::InternetGatewayDevice &device) {
+static void test_2(tr069::InternetGatewayDevice &device) {
   cout << setw(40) << "uptime " << device.device_info().up_time() << endl;
   for (int i = 0; i < device.device_info().vendor_config_file_size(); i++) {
-    //const tr_069_1_0_0_full::InternetGatewayDevice_DeviceInfo_VendorConfigFile &vendorconfigfile = device.deviceinfo().vendorconfigfile(i);
+    //const tr069::InternetGatewayDevice_DeviceInfo_VendorConfigFile &vendorconfigfile = device.deviceinfo().vendorconfigfile(i);
     cout << setw(40) << "date " << device.device_info().vendor_config_file(i).date() << endl;
   }
   
   device.mutable_device_info()->set_up_time(device.device_info().up_time()+1);
   if (device.device_info().vendor_config_file_size()==0) {
-    //tr_069_1_0_0_full::InternetGatewayDevice_DeviceInfo_VendorConfigFile *vendorconfigfile;
+    //tr069::InternetGatewayDevice_DeviceInfo_VendorConfigFile *vendorconfigfile;
     device.mutable_device_info()->add_vendor_config_file()->set_date(__DATE__);
   }
 }
 
-static void test_3(tr_069_1_0_0_full::InternetGatewayDevice &device) {
+static void test_3(tr069::InternetGatewayDevice &device) {
   cout << setw(40) << "forwardnumberofentries " << device.layer3forwarding().forward_number_of_entries() << endl;
   for (int i = 0; i < device.layer3forwarding().forwarding_size(); i++) {
     cout << setw(40) << "mtu " << device.layer3forwarding().forwarding(i).mtu() << endl;
@@ -47,7 +47,7 @@ static void test_3(tr_069_1_0_0_full::InternetGatewayDevice &device) {
   }
 }
 
-static void test_4(tr_069_1_0_0_full::InternetGatewayDevice &device) {
+static void test_4(tr069::InternetGatewayDevice &device) {
   if (device.wandevice_size()==0) {
     device.add_wandevice()->add_wanconnection_device()->add_wanpppconnection()->mutable_stats()->set_ethernet_packets_received(__LINE__);
   } else {
@@ -58,11 +58,16 @@ static void test_4(tr_069_1_0_0_full::InternetGatewayDevice &device) {
 }
 
 static int test() {
-  tr_069_1_0_0_full::InternetGatewayDevice device;
+  string data_file_name(__FILE__);
+  data_file_name.erase(data_file_name.rfind(".cc"));  
+  data_file_name += ".dat";
+  cout << data_file_name.c_str() << endl;
+  
+  tr069::InternetGatewayDevice device;
 
-  fstream input("device.dat", ios::in | ios::binary); // % hexdump -C device.dat 
+  fstream input(data_file_name.c_str(), ios::in | ios::binary); // % hexdump -C device.dat 
   if (!input) {
-    cout << "device.dat" << ": File not found.  Creating a new file." << endl;
+    cout << data_file_name << ": File not found.  Creating a new file." << endl;
   } else if (!device.ParseFromIstream(&input)) {
     cerr << "Failed to parse device data." << endl;
     return -1;
@@ -72,13 +77,13 @@ static int test() {
   test_2(device);
   test_3(device);
   test_4(device);
-  
-  fstream output("device.dat", ios::out | ios::trunc | ios::binary);
+
+  fstream output(data_file_name.c_str(), ios::out | ios::trunc | ios::binary);
   if (!device.SerializeToOstream(&output)) {
     cerr << "Failed to write device data." << endl;
     return -1;
   }
-  
+
   return 0;
 }
 

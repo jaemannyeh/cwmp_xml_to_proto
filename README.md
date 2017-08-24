@@ -37,6 +37,15 @@ Have a look at the files, and use the terminal to build them:
     $ make pb_obj
     g++ -std=c++11 -I/usr/local/include -pthread  -c -o tr-069-1-0-0-full.pb.o tr-069-1-0-0-full.pb.cc
     g++ -std=c++11 -I/usr/local/include -pthread  -c -o tr-069-1-0-0-full.grpc.pb.o tr-069-1-0-0-full.grpc.pb.cc
+    
+To test
 
-
+    $ make test-tr-069
+    c++ test-tr-069.cc tr-069-1-0-0-full.pb.cc -o test-tr-069 `pkg-config --cflags --libs protobuf`
+    $ ./test-tr-069
+    ......
+    $ ./test-tr-069
+    ......
+    
+jaemannyeh    
 
